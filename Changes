@@ -1,5 +1,7 @@
 Revision history for Perl extension MojoX-Dispatcher-Qooxdoo-Jsonrpc:
 
+0.91    fix MANIFEST
+
 0.90    fix tests and example to track changes in mojolicious
 
 0.89    fix test; perl 5.17.6 randomizes hashes

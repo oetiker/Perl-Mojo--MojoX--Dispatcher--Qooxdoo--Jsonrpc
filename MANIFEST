@@ -1,7 +1,7 @@
 Changes
 example/bin/server.pl
+example/lib/QxExample.pm
 example/lib/QxExample/JsonRpcService.pm
-example/lib/QxExample/MojoApp.pm
 lib/Mojolicious/Plugin/QooxdooJsonrpc.pm
 lib/MojoX/Dispatcher/Qooxdoo/Jsonrpc.pm
 Makefile.PL
