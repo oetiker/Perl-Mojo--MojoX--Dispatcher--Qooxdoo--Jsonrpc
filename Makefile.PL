@@ -16,9 +16,9 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'MojoX::Dispatcher::Qooxdoo::Jsonrpc',
   'PREREQ_PM' => {
-    'Mojolicious' => '3.85'
+    'Mojolicious' => '4.0'
   },
-  'VERSION' => '0.91',
+  'VERSION' => '0.93',
   'test' => {
     'TESTS' => 't/*.t'
   }

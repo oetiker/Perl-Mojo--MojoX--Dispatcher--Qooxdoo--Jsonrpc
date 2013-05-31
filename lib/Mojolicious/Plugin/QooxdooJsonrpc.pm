@@ -4,7 +4,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 use File::Spec::Functions qw(splitdir updir catdir file_name_is_absolute);
 use Cwd qw(abs_path);
 
-our $VERSION = '0.91';
+our $VERSION = '0.93';
 # the dispatcher module gets autoloaded, we list it here to
 # make sure it is available and compiles at startup time and not
 # only on demand.
@@ -58,7 +58,7 @@ sub register {
             $static->paths([$prefixCache{$prefix}]);
 
             unless ($static->dispatch($self)){
-                $self->render_text($self->req->url->path.' not found', status => 404);
+                $self->render(text=>$self->req->url->path.' not found', status => 404);
             }
         };
 
