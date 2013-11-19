@@ -1,5 +1,7 @@
 Revision history for Perl extension MojoX-Dispatcher-Qooxdoo-Jsonrpc:
 
+0.94    provide more meaningful errors on botched jsonrpc input
+
 0.93    replace render_text(xxx)  with render(text=> ...)
 
 0.92    fixed tests to work with mojo 4.0

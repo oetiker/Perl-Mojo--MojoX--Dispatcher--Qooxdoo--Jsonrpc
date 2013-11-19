@@ -10,7 +10,7 @@ use Encode;
 
 our $toUTF8 = find_encoding('utf8');
 
-our $VERSION = '0.93';
+our $VERSION = '0.94';
 
 has 'JSON' => sub { Mojo::JSON->new };
 
@@ -36,7 +36,13 @@ sub dispatch {
     for ( $self->req->method ){
         /^POST$/ && do {
             # Data comes as JSON object, so fetch a reference to it
-            $data           = $json->decode($self->req->body);
+            $data           = $json->decode($self->req->body) or 
+	    do {
+		my $error = "Invalid json string: " . $json->error;
+		$log->error($error);
+		$self->render(text => $error, status=>500);
+		return;
+	    };
             $id             = $data->{id};
             $cross_domain   = 0;
             next;
@@ -44,7 +50,14 @@ sub dispatch {
         /^GET$/ && do {
             $data= $json->decode(
                 $self->param('_ScriptTransport_data')
-            );
+            ) or
+	    do {
+		my $error = "Invalid json string: " . $json->error;
+		$log->error($error);
+		$self->render(text => $error, status=>500);
+		return;
+	    };
+
             $id = $self->param('_ScriptTransport_id') ;
             $cross_domain   = 1;
             next;

@@ -1,4 +1,4 @@
-use Test::More tests => 24;
+use Test::More tests => 27;
 use Test::Mojo;
 
 use FindBin;
@@ -11,7 +11,11 @@ use_ok 'QxExample';
 
 my $t = Test::Mojo->new('QxExample');
 
-$t->post_ok('/jsonrpc','dummy')
+$t->post_ok('/jsonrpc','{"hello": dummy}')
+  ->content_like(qr/Invalid json string: Malformed JSON/,'bad request identified')
+  ->status_is(500);
+
+$t->post_ok('/jsonrpc','{"ID":1,"method":"test"}')
   ->content_like(qr/Missing 'id' property in JsonRPC request/,'bad request identified')
   ->status_is(500);
 
