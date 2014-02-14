@@ -1,5 +1,8 @@
 Revision history for Perl extension MojoX-Dispatcher-Qooxdoo-Jsonrpc:
 
+0.95    track mojo changes ... mojo does not split GET query strings on ;
+        anymore. fixed tests.
+
 0.94    provide more meaningful errors on botched jsonrpc input
 
 0.93    replace render_text(xxx)  with render(text=> ...)

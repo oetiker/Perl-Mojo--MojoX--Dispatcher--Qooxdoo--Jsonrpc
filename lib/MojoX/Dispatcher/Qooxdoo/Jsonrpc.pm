@@ -6,11 +6,11 @@ use warnings;
 use Mojo::JSON;
 use Mojo::Base 'Mojolicious::Controller';
 use Encode;
-
+use Data::Dumper;
 
 our $toUTF8 = find_encoding('utf8');
 
-our $VERSION = '0.94';
+our $VERSION = '0.95';
 
 has 'JSON' => sub { Mojo::JSON->new };
 
@@ -47,12 +47,13 @@ sub dispatch {
             $cross_domain   = 0;
             next;
         };
-        /^GET$/ && do {
+        /^GET$/ && do {            
+            my $v = $self->param('_ScriptTransport_data');
             $data= $json->decode(
                 $self->param('_ScriptTransport_data')
             ) or
 	    do {
-		my $error = "Invalid json string: " . $json->error;
+		my $error = "Invalid json string: " . $json->error . " " .Dumper $self->param;
 		$log->error($error);
 		$self->render(text => $error, status=>500);
 		return;
