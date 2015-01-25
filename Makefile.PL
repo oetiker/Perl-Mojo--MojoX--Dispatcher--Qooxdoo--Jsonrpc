@@ -2,6 +2,10 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker 6.31;
 
+BEGIN {
+    warn "MojoX::Dispatcher::Qooxdoo::Jsonrpc is DEPRECATED. Please switch to using Mojolicious::Plugin::Qooxdoo.\n" unless $ENV{DISABLE_DEPRECATION_WARNING_MPQ};
+}
+
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'dispatch Qooxdoo applications with Mojo',
   'AUTHOR' => 'Matthias Bloch <matthias at puffin ch>',
@@ -16,9 +20,9 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'MojoX::Dispatcher::Qooxdoo::Jsonrpc',
   'PREREQ_PM' => {
-    'Mojolicious' => '4.0'
+    'Mojolicious' => '5.0'
   },
-  'VERSION' => '0.95',
+  'VERSION' => '0.96',
   'test' => {
     'TESTS' => 't/*.t'
   }

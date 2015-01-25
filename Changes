@@ -1,5 +1,8 @@
 Revision history for Perl extension MojoX-Dispatcher-Qooxdoo-Jsonrpc:
 
+0.96    fix Mojolicious 5.73 compatibility and DEPRECATE the module in favor
+        of Mojolicious::Plugin::Qooxdoo.
+
 0.95    track mojo changes ... mojo does not split GET query strings on ;
         anymore. fixed tests.
 

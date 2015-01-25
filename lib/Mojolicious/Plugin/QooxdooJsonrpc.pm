@@ -4,7 +4,11 @@ use Mojo::Base 'Mojolicious::Plugin';
 use File::Spec::Functions qw(splitdir updir catdir file_name_is_absolute);
 use Cwd qw(abs_path);
 
-our $VERSION = '0.95';
+BEGIN {
+    warn "Mojolicious::Plugin::QooxdooJsonrpc is DEPRECATED. Please switch to using Mojolicious::Plugin::Qooxdoo.\n" unless $ENV{DISABLE_DEPRECATION_WARNING_MPQ};
+}
+
+our $VERSION = '0.96';
 # the dispatcher module gets autoloaded, we list it here to
 # make sure it is available and compiles at startup time and not
 # only on demand.
@@ -92,6 +96,8 @@ __END__
 Mojolicious::Plugin::QooxdooJsonrpc - handle qooxdoo Jsonrpc requests
 
 =head1 SYNOPSIS
+
+THIS MODULE IS DEPRECATED. USE L<Mojolicious::Plugin::Qooxdoo> INSTEAD.
 
  # lib/your-application.pm
 

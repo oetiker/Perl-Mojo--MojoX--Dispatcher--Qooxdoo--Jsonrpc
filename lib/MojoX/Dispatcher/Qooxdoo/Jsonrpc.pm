@@ -3,16 +3,19 @@ package MojoX::Dispatcher::Qooxdoo::Jsonrpc;
 use strict;
 use warnings;
 
-use Mojo::JSON;
+use Mojo::JSON qw(encode_json decode_json);
 use Mojo::Base 'Mojolicious::Controller';
 use Encode;
 use Data::Dumper;
 
 our $toUTF8 = find_encoding('utf8');
 
-our $VERSION = '0.95';
+BEGIN {
+    warn "MojoX::Dispatcher::Qooxdoo::Jsonrpc is DEPRECATED. Please switch to using Mojolicious::Plugin::Qooxdoo.\n" unless $ENV{DISABLE_DEPRECATION_WARNING_MPQ};
+}
 
-has 'JSON' => sub { Mojo::JSON->new };
+
+our $VERSION = '0.96';
 
 sub dispatch {
     my $self = shift;
@@ -20,8 +23,6 @@ sub dispatch {
     # We have to differentiate between POST and GET requests, because
     # the data is not sent in the same place..
     my $log = $self->app->log;
-
-    my $json = $self->JSON;
 
     # send warnings to log file preserving the origin
     local $SIG{__WARN__} = sub {
@@ -36,28 +37,26 @@ sub dispatch {
     for ( $self->req->method ){
         /^POST$/ && do {
             # Data comes as JSON object, so fetch a reference to it
-            $data           = $json->decode($self->req->body) or 
-	    do {
-		my $error = "Invalid json string: " . $json->error;
-		$log->error($error);
-		$self->render(text => $error, status=>500);
-		return;
-	    };
+            $data = eval { decode_json($self->req->body) };
+	        if ($@) {
+        		my $error = "Invalid json string: " . $@;
+		        $log->error($error);
+        		$self->render(text => $error, status=>500);
+		        return;
+    	    };
             $id             = $data->{id};
             $cross_domain   = 0;
             next;
         };
         /^GET$/ && do {            
             my $v = $self->param('_ScriptTransport_data');
-            $data= $json->decode(
-                $self->param('_ScriptTransport_data')
-            ) or
-	    do {
-		my $error = "Invalid json string: " . $json->error . " " .Dumper $self->param;
-		$log->error($error);
-		$self->render(text => $error, status=>500);
-		return;
-	    };
+            $data = eval { decode_json($self->param('_ScriptTransport_data')) };
+            if ($@){
+        		my $error = "Invalid json string: " . $@ . " " .Dumper $self->param;
+		        $log->error($error);
+        		$self->render(text => $error, status=>500);
+		        return;
+    	    };
 
             $id = $self->param('_ScriptTransport_id') ;
             $cross_domain   = 1;
@@ -145,7 +144,7 @@ sub dispatch {
              code=> 4
         } if not $svc->can($method);
 
-        $log->debug("call $method(".$json->encode($params).")");
+        $log->debug("call $method(".encode_json($params).")");
         # reply
         no strict 'refs';
         $svc->$method(@$params);
@@ -176,11 +175,11 @@ sub dispatch {
                 code=> 9999
             };
         }
-        $reply = $json->encode({ id => $id, error => $error });
+        $reply = encode_json({ id => $id, error => $error });
         $log->error("JsonRPC Error $error->{code}: $error->{message}");
     }
     else {
-        $reply = $json->encode({ id => $id, result => $reply });
+        $reply = encode_json({ id => $id, result => $reply });
         $log->debug("return ".$reply);
     }
 
@@ -206,6 +205,8 @@ sub dispatch {
 MojoX::Dispatcher::Qooxdoo::Jsonrpc - Dispatcher for Qooxdoo Json Rpc Calls
 
 =head1 SYNOPSIS
+
+THIS MODULE IS DEPRECATED. USE L<Mojolicious::Plugin::Qooxdoo> INSTEAD.
 
  # lib/your-application.pm
 
